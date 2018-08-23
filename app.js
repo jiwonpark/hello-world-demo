@@ -11,6 +11,32 @@ var pool = mysql.createPool({
     connectionLimit: 100
 });
 
+const CREATE_TABLE_STATEMENT =
+    "CREATE TABLE fruit (" +
+    "    id varchar(256) PRIMARY KEY," +
+    "    name varchar(256) NOT NULL" +
+    ");";
+
+var createTable = function() {
+    return new Promise((resolve, reject) => {
+        pool.getConnection(function(error, connection) {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            connection.query(CREATE_TABLE_STATEMENT, function(error, result) {
+                connection.release();
+
+                if (error)
+                    reject(error);
+                else
+                    resolve(result);
+            });
+        });
+    });
+};
+
 var getAllFruits = function() {
     return new Promise((resolve, reject) => {
         pool.getConnection(function(error, connection) {
@@ -35,6 +61,12 @@ app.get('/', (req, res) => {
     getAllFruits()
     .then(result => res.send('Hello World of Fruits! ' + result))
     .catch(error => res.send('Hello World of Fruits! ' + error));
+});
+
+app.get('/create-table', (req, res) => {
+    createTable()
+    .then(result => res.send('Create table success! ' + result))
+    .catch(error => res.send('Create table failed! ' + error));
 });
 
 app.listen(8081, () => console.log('Example app listening on port 8081!'));
