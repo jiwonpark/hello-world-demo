@@ -79,20 +79,20 @@ var getAllFruits = function() {
 
 app.get('/', (req, res) => {
     getAllFruits()
-    .then(result => res.send('Hello World of Fruits! ' + result))
-    .catch(error => res.send('Hello World of Fruits! ' + error));
+    .then(result => res.send('Hello World of Fruits! ' + JSON.stringify(result)))
+    .catch(error => res.send('Hello World of Fruits! ' + JSON.stringify(error)));
 });
 
 app.get('/create-table', (req, res) => {
     createTable()
-    .then(result => res.send('Create table success! ' + result))
-    .catch(error => res.send('Create table failed! ' + error));
+    .then(result => res.send('Create table success! ' + JSON.stringify(result)))
+    .catch(error => res.send('Create table failed! ' + JSON.stringify(error)));
 });
 
 app.get('/insert', (req, res) => {
     insert('111', 'banana')
-    .then(result => res.send('Insert success! ' + result))
-    .catch(error => res.send('Insert failed! ' + error));
+    .then(result => res.send('Insert success! ' + JSON.stringify(result)))
+    .catch(error => res.send('Insert failed! ' + JSON.stringify(error)));
 });
 
 app.listen(8081, () => console.log('Example app listening on port 8081!'));
