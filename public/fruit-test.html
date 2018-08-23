@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fruit API TEST PAGE</title>
+</head>
+
+<body>
+    <div class="container col-lg-4">
+        <h2>Fruit API Test</h2>
+
+        <!-- TEST Module #1 -->
+        <div id="post-fruit" class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">POST /api/fruit/ - 과일 등록</h3>
+            </div>
+            <div class="panel-body">
+                <label>ID</label><input class="id" type="text" value="333"><br>
+                <label>Name</label><input class="name" type="text" value="lemon"><br>
+                <button type="button" class="btn btn-primary btn-block">Post</button>
+                <div class="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+    crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            // <!-- TEST Module #1-->
+            $('#post-fruit button').on('click', function(e){
+                var id = $('#post-fruit .id').val();
+                var name = $('#post-fruit .name').val();
+
+                var request = {};
+                
+                if (id)
+                    request.id = id;
+
+                if (name)
+                    request.name = name;
+
+                $('#post-fruit .result').html('');
+                $.ajax({
+                    url: '/fruit',
+                    type: 'POST',
+                    contentType: "application/json",
+                    data: JSON.stringify(request),
+                    success: function (data) {
+                        $('#post-fruit .result').html('<pre>' + JSON.stringify(data, undefined, 2) + '</pre>');
+                    },
+                    error: function (request,status,error) {
+                        $('#post-fruit .result').html("code: " + request.status + ", message: " + request.responseText);
+                    },
+                    cache: false
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

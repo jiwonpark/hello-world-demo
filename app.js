@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 
 var rdbManager = require('./rdbManager.js');
 
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
