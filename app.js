@@ -32,7 +32,9 @@ var getAllFruits = function() {
 };
 
 app.get('/', (req, res) => {
-    getAllFruits().then(result => res.send('Hello World of Fruits! ' + result));
+    getAllFruits()
+    .then(result => res.send('Hello World of Fruits! ' + result))
+    .catch(error => res.send('Hello World of Fruits! ' + error));
 });
 
 app.listen(8081, () => console.log('Example app listening on port 8081!'));
