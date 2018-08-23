@@ -17,6 +17,8 @@ const CREATE_TABLE_STATEMENT =
     "    name varchar(256) NOT NULL" +
     ");";
 
+const INSERT_STATEMENT = "INSERT INTO fruit (id, name) VALUES (?, ?);";
+
 var createTable = function() {
     return new Promise((resolve, reject) => {
         pool.getConnection(function(error, connection) {
@@ -26,6 +28,24 @@ var createTable = function() {
             }
 
             connection.query(CREATE_TABLE_STATEMENT, function(error, result) {
+                connection.release();
+
+                if (error)
+                    reject(error);
+                else
+                    resolve(result);
+            });
+        });
+    });
+};
+
+var insert = function(id, name) {
+    return new Promise((resolve, reject) => {
+        pool.getConnection(function(error, connection){
+            if (error)
+                reject(error);
+
+            connection.query(INSERT_STATEMENT, [id, name], function(error, result) {
                 connection.release();
 
                 if (error)
@@ -67,6 +87,12 @@ app.get('/create-table', (req, res) => {
     createTable()
     .then(result => res.send('Create table success! ' + result))
     .catch(error => res.send('Create table failed! ' + error));
+});
+
+app.get('/insert', (req, res) => {
+    insert('111', 'banana')
+    .then(result => res.send('Insert success! ' + result))
+    .catch(error => res.send('Insert failed! ' + error));
 });
 
 app.listen(8081, () => console.log('Example app listening on port 8081!'));
