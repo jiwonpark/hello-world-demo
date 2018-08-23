@@ -11,8 +11,11 @@ app.use(bodyParser.json());
 
 app.get('/fruit', (req, res) => {
     rdbManager.getAllFruits()
-    .then(result => res.send('Hello World of Fruits! ' + JSON.stringify(result)))
-    .catch(error => res.send('Hello World of Fruits! ' + JSON.stringify(error)));
+    .then(result => res.send(result))
+    .catch(error => {
+        res.status(500).send('Error');
+        console.log(JSON.stringify(error));
+    });
 });
 
 // app.get('/create-table', (req, res) => {
@@ -23,18 +26,21 @@ app.get('/fruit', (req, res) => {
 
 app.post('/fruit', (req, res) => {
     if (!req.body || !req.body.id) {
-        res.send('Error : id is mandatory');
+        res.status(400).send('Error : id is mandatory');
         return;
     }
 
     if (!req.body.name) {
-        res.send('Error : name is mandatory');
+        res.status(400).send('Error : name is mandatory');
         return;
     }
 
     rdbManager.insert(req.body.id, req.body.name)
-    .then(result => res.send('Insert success! ' + JSON.stringify(result)))
-    .catch(error => res.send('Insert failed! ' + JSON.stringify(error)));
+    .then(result => res.send('Success'))
+    .catch(error => {
+        res.status(500).send('Error');
+        console.log(JSON.stringify(error));
+    });
 });
 
 app.listen(8081, () => console.log('Example app listening on port 8081!'));
